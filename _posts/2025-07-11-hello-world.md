@@ -7,3 +7,6 @@ tags: [tag1,tag2]
 
 ## Hello World
 This is paragraph.
+
+
+{% include comment.html %}
