@@ -13,9 +13,10 @@ body {
     .content {
         max-width: 900px;
         font-size: 14px;
+        margin-top: 0px;
     }
-}
 
-.content {
-    margin-top: 0px;
+    code {
+        text-shadow: none;
+    }
 }
