@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/resources/it/linux/bash-notes/","tags":["#awk","#delimiter","#separator","#extension","gardenEntry"],"updated":"2025-07-14T12:07:15.987+07:00"}
+{"dg-publish":true,"permalink":"/resources/it/linux/bash-notes/","tags":["#awk","#delimiter","#separator","#extension"],"updated":"2025-07-14T13:22:49.396+07:00"}
 ---
 
 # Get script BASE_DIR
