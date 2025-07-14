@@ -16,7 +16,7 @@ body {
         margin-top: 0px;
     }
 
-    code {
-        text-shadow: none;
+    code[class*="language-"] {
+      text-shadow: none !important;
     }
 }
