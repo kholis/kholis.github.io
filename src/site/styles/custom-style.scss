@@ -17,6 +17,10 @@ body {
     }
 
     code[class*="language-"] {
-      text-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    code[class*=language-],pre[class*=language-] {
+        text-shadow: none !important;
     }
 }
