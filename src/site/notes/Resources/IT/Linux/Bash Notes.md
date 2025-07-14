@@ -1,9 +1,20 @@
 ---
-{"dg-publish":true,"permalink":"/resources/it/linux/bash-notes/","tags":["#awk","#delimiter","#separator","#extension"],"updated":"2025-07-14T13:22:49.396+07:00"}
+{"dg-publish":true,"permalink":"/resources/it/linux/bash-notes/","tags":["#awk","#delimiter","#separator","bash"],"created":"2024-07-05T08:47:50.824+07:00","updated":"2025-07-14T18:00:55.038+07:00"}
 ---
 
+# Coloring PS1
+Add this line to `~/.bashrc`
+```bash
+export PS1="\[\033[36;1m\]\u\[\033[m\]@\[\033[32;1m\]\h:\[\033[33;1m\]\w\[\033[m\]\$ "
+```
+
+Result:
+![Pasted image 20250714141432.png](/img/user/Resources/IT/Linux/Pasted%20image%2020250714141432.png)
+
+Bash color code: https://gkarthiks.github.io/quick-commands-cheat-sheet/bash_command.html
+
 # Get script BASE_DIR
-## cloude.ai
+## 1. from claude.ai
 ```bash
 #!/bin/bash
 
@@ -39,7 +50,7 @@ echo "The script is located in: $SCRIPT_DIR"
 # ... (rest of your script)
 ```
 
-## stackoverflow
+## 2. stackoverflow
 ```bash
 #!/usr/bin/env bash
 
