@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<title>Digital Garden Home</title>
+<title>Bash Notes</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <script async type="module">import mermaid from"https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs"</script>
 <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js" integrity="sha512-hpZ5pDCF2bRCweL5WoA0/N1elet1KYL5mx3LP555Eg/0ZguaHawxNvEjF6O3rufAChs16HVNhEc6blF/rZoowQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -87,7 +87,7 @@ CTRL + K
 <span class="foldername">Linux</span>
 </div>
 <div x-show="isOpen" style="display:none" class="filelist">
-<div @click.stop class="notelink"><i icon-name="sticky-note" aria-hidden="true"></i><a data-note-icon="" style="text-decoration:none" class="filename" href="/resources/it/linux/bash-notes/">Bash Notes </a>
+<div @click.stop class="notelink active-note"><i icon-name="sticky-note" aria-hidden="true"></i><a data-note-icon="" style="text-decoration:none" class="filename" href="/resources/it/linux/bash-notes/">Bash Notes </a>
 </div>
 </div>
 </div>
@@ -97,7 +97,7 @@ CTRL + K
 </div>
 </div>
 <div x-show="isOpen" style="display:none" class="">
-<div @click.stop class="notelink active-note"><i icon-name="sticky-note" aria-hidden="true"></i><a data-note-icon="" style="text-decoration:none" class="filename" href="/">Digital Garden Home </a>
+<div @click.stop class="notelink"><i icon-name="sticky-note" aria-hidden="true"></i><a data-note-icon="" style="text-decoration:none" class="filename" href="/">Digital Garden Home </a>
 </div>
 </div>
 </div>
@@ -129,19 +129,138 @@ CTRL + K
 <div class="header-meta">
 <div class="header-tags">
 <a class="tag" onclick="toggleTagSearch(this)">
-##article
+##awk
 </a>
 <a class="tag" onclick="toggleTagSearch(this)">
-##Blogs
+##delimiter
+</a>
+<a class="tag" onclick="toggleTagSearch(this)">
+##separator
+</a>
+<a class="tag" onclick="toggleTagSearch(this)">
+##extension
 </a>
 </div>
-</div>
+<div class="timestamps"><div><i icon-name="calendar-clock"></i> <span class="human-date" data-date="2025-07-14T13:22:49.396+07:00"></span></div></div></div>
 </header>
-<p>🏡</p>
-<h1 id="welcome" tabindex="-1">Welcome</h1>
-<p>Hi, welcome to my digital garden.</p>
-<p>Enjoy!</p>
+<h1 id="get-script-base-dir" tabindex="-1">Get script BASE_DIR</h1>
+<h2 id="a-href-http-cloude-ai-target-blank-class-external-link-cloude-ai-a" tabindex="-1"><a href="http://cloude.ai" target="_blank" class="external-link">cloude.ai</a></h2>
+<pre><code class="language-bash">#!/bin/bash
+
+# Get the directory of the script
+get_script_dir() {
+    # Get the source directory
+    SOURCE=&quot;${BASH_SOURCE[0]}&quot;
+
+    # Resolve $SOURCE until the file is no longer a symlink
+    while [ -h &quot;$SOURCE&quot; ]; do
+        DIR=&quot;$( cd -P &quot;$( dirname &quot;$SOURCE&quot; )&quot; &amp;&amp; pwd )&quot;
+        SOURCE=&quot;$(readlink &quot;$SOURCE&quot;)&quot;
+        # If $SOURCE was a relative symlink, we need to resolve it 
+        # relative to the path where the symlink file was located
+        [[ $SOURCE != /* ]] &amp;&amp; SOURCE=&quot;$DIR/$SOURCE&quot;
+    done
+
+    # Get the canonical path of the script directory
+    DIR=&quot;$( cd -P &quot;$( dirname &quot;$SOURCE&quot; )&quot; &amp;&amp; pwd )&quot;
+
+    echo &quot;$DIR&quot;
+}
+
+# Call the function and store the result
+SCRIPT_DIR=$(get_script_dir)
+
+# Print the result
+echo &quot;The script is located in: $SCRIPT_DIR&quot;
+
+# You can use $SCRIPT_DIR for further operations in your script
+# For example:
+# cd &quot;$SCRIPT_DIR&quot;
+# ... (rest of your script)
+</code></pre>
+<h2 id="stackoverflow" tabindex="-1">stackoverflow</h2>
+<pre><code class="language-bash">#!/usr/bin/env bash
+
+SCRIPT_DIR=$( cd -- &quot;$( dirname -- &quot;${BASH_SOURCE[0]}&quot; )&quot; &amp;&gt; /dev/null &amp;&amp; pwd )
+</code></pre>
+<p>is a useful one-liner which will give you the full directory name of the script no matter where it is being called from.</p>
+<p>It will work as long as the last component of the path used to find the script is not a symlink (directory links are OK). If you also want to resolve any links to the script itself, you need a multi-line solution:</p>
+<pre><code class="language-bash">#!/usr/bin/env bash
+
+SOURCE=${BASH_SOURCE[0]}
+while [ -L &quot;$SOURCE&quot; ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR=$( cd -P &quot;$( dirname &quot;$SOURCE&quot; )&quot; &gt;/dev/null 2&gt;&amp;1 &amp;&amp; pwd )
+  SOURCE=$(readlink &quot;$SOURCE&quot;)
+  [[ $SOURCE != /* ]] &amp;&amp; SOURCE=$DIR/$SOURCE # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DIR=$( cd -P &quot;$( dirname &quot;$SOURCE&quot; )&quot; &gt;/dev/null 2&gt;&amp;1 &amp;&amp; pwd )
+</code></pre>
+<p>This last one will work with any combination of aliases, <code>source</code>, <code>bash -c</code>, symlinks, etc.<br>
+Ref: <a href="https://stackoverflow.com/a/246128/1377004" target="_blank" class="external-link">https://stackoverflow.com/a/246128/1377004</a></p>
+<h1 id="get-filename-and-extension" tabindex="-1">Get filename and extension</h1>
+<p>ref: <a href="https://stackoverflow.com/a/965072/1377004" target="_blank" class="external-link">https://stackoverflow.com/a/965072/1377004</a></p>
+<pre><code class="language-bash">filename=$(basename -- &quot;$fullfile&quot;)
+extension=&quot;${filename##*.}&quot;
+filename=&quot;${filename%.*}&quot;
+</code></pre>
+<h1 id="replace-file-extension" tabindex="-1">Replace file extension</h1>
+<pre><code>find . -iname &quot;*.txt&quot; -exec bash -c 'mv &quot;$0&quot; &quot;${0%\.txt}.md&quot;' {} \;
+</code></pre>
+<p>ref: <a href="https://www.reddit.com/r/ObsidianMD/comments/qgyjij/comment/kux05ai/" target="_blank" class="external-link">https://www.reddit.com/r/ObsidianMD/comments/qgyjij/comment/kux05ai/</a></p>
+<h1 id="awk-ofs-delimiter-separator" tabindex="-1">Awk OFS delimiter separator</h1>
+<p><code>-F</code>: input delimiter<br>
+<code>OFS</code>: output delimiter</p>
+<pre><code>awk -F &quot;\t&quot; -v OFS=&quot;|&quot; '{print $1, $2, $3}'
+</code></pre>
+<h1 id="find-file-only-on-current-dir-then-compress" tabindex="-1">Find file only on current dir then compress</h1>
+<pre><code>$ find /path/ -maxdepth 1 -type f -exec tar czf /tmp/file.tar.gz {} \+ 
+</code></pre>
+<p>ref: <a href="https://stackoverflow.com/a/16703837/1377004" target="_blank" class="external-link">https://stackoverflow.com/a/16703837/1377004</a></p>
+<h1 id="sshfs-with-id-rsa" tabindex="-1">sshfs with id_rsa</h1>
+<pre><code>sshfs -o allow_other,defer_permissions,IdentityFile=~/.ssh/id_rsa root@xxx.xxx.xxx.xxx:/ /mnt/droplet
+</code></pre>
+<p>ref: <a href="https://vtcri.kayako.com/article/86-sshfs-to-mount-remote-file-systems-over-ssh" target="_blank" class="external-link">https://vtcri.kayako.com/article/86-sshfs-to-mount-remote-file-systems-over-ssh</a></p>
+<p>in fstab:</p>
+<pre><code>sshfs#USER@domain.com:/data/www /mnt/logs/  fuse IdentityFile=/home/USER/.ssh/id_rsa,uid=UID,gid=GUID,users,idmap=user,noatime,allow_other,_netdev,reconnect,ro 0 0
+</code></pre>
+<p>ref: <a href="https://ivan.reallusiondesign.com/mount-sshfs-volumes-in-fstab-with-ssh-key/" target="_blank" class="external-link">https://ivan.reallusiondesign.com/mount-sshfs-volumes-in-fstab-with-ssh-key/</a></p>
+<p>What you need to do is specify which private key to use in the <code>~/.ssh/config</code> file. for example:</p>
+<pre><code>Host server1.nixcraft.com
+    IdentityFile ~/backups/.ssh/id_dsa
+Host server2.nixcraft.com
+    IdentityFile /backup/home/userName/.ssh/id_rsa
+</code></pre>
+<p>ref: <a href="https://unix.stackexchange.com/a/61571/55247" target="_blank" class="external-link">https://unix.stackexchange.com/a/61571/55247</a></p>
+<h1 id="check-return-value" tabindex="-1">Check return value</h1>
+<p><code>&amp;&amp;</code> execute when return value 0<br>
+<code>||</code> execute when return value not 0<br>
+ex:</p>
+<pre><code class="language-bash">nc -z host $PORT &amp;&amp; echo port $PORT open || echo port $PORT close
+</code></pre>
+<h1 id="retry-until-succeed" tabindex="-1">Retry until succeed</h1>
+<pre><code class="language-bash">MAX_RETRIES=10
+RETRY_DELAY=60  # seconds
+COUNT=0
+
+while true; do
+    ./your-script.sh
+    if [ $? -eq 0 ]; then
+        echo &quot;Script succeeded.&quot;
+        break
+    fi
+    COUNT=$((COUNT+1))
+    if [ $COUNT -ge $MAX_RETRIES ]; then
+        echo &quot;Script failed after $MAX_RETRIES attempts.&quot;
+        exit 1
+    fi
+    echo &quot;Retrying in $RETRY_DELAY seconds...&quot;
+    sleep $RETRY_DELAY
+done
+</code></pre>
 </main>
+<script>window.location.hash&&document.getElementById(window.location.hash.slice(1)).classList.add("referred"),window.addEventListener("hashchange",(e=>{const t=e.oldURL.split("#");t[1]&&document.getElementById(t[1]).classList.remove("referred");const n=e.newURL.split("#");n[1]&&document.getElementById(n[1]).classList.add("referred")}),!1);const url_parts=window.location.href.split("#"),url=url_parts[0],referrence=url_parts[1];document.querySelectorAll(".cm-s-obsidian > *[id]").forEach((function(e){e.ondblclick=function(e){const t=url+"#"+e.target.id;navigator.clipboard.writeText(t)}}))</script>
+<script src="https://fastly.jsdelivr.net/npm/luxon@3.2.1/build/global/luxon.min.js"></script>
+<script defer="defer">TIMESTAMP_FORMAT="MMM dd, yyyy h:mm a",document.querySelectorAll(".human-date").forEach((function(e){date=e.getAttribute("data-date")||e.innerText,parsed_date=luxon.DateTime.fromISO(date),null!=parsed_date.invalid&&(parsed_date=luxon.DateTime.fromSQL(date)),null!=parsed_date.invalid&&(parsed_date=luxon.DateTime.fromHTML(date)),e.innerHTML=parsed_date.toFormat(TIMESTAMP_FORMAT)}))</script>
 <script>lucide.createIcons({attrs:{class:["svg-icon"]}})</script>
 </body>
 </html>
